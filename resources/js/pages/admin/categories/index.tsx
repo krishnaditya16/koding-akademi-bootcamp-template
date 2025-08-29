@@ -1,13 +1,13 @@
 import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem, Category } from "@/types";
-import { Head, Link, usePage } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import { DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Heading from "@/components/heading";
 import categories from "@/routes/categories";
 import { columns } from "./column";
-import { toast } from "sonner";
+import { useFlashToast } from "@/hooks/use-flash-toast";
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -21,11 +21,7 @@ interface Props {
 }
 
 export default function Index({ categoriesData }: Props) {
-  const { flash } = usePage().props as { flash?: { success?: string; error?: string; toast?: { type: string; message: string } } };;
-
-  if (flash) {
-    toast.success(flash.success);
-  }
+  useFlashToast();
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
