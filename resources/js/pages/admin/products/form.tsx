@@ -19,7 +19,7 @@ import products from "@/routes/products";
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: "Products",
-    href: "/products",
+    href: products.index().url,
   },
 ];
 
@@ -37,7 +37,6 @@ export default function Form({ categories, product }: Props) {
     name: product?.name || "",
     description: product?.description || "",
     company: product?.company || "",
-    stock: product?.stock || 0,
     price: product?.price || 0,
     image: null as File | null,
   });
@@ -129,18 +128,6 @@ export default function Form({ categories, product }: Props) {
               disabled={processing}
             />
             {errors.company && <p className="text-sm text-red-600">{errors.company}</p>}
-          </div>
-
-          <div className="flex flex-col gap-y-4">
-            <Label htmlFor="stock">Stock</Label>
-            <Input
-              id="stock"
-              type="number"
-              value={data.stock}
-              onChange={(e) => setData("stock", parseInt(e.target.value))}
-              disabled={processing}
-            />
-            {errors.stock && <p className="text-sm text-red-600">{errors.stock}</p>}
           </div>
 
           <div className="flex flex-col gap-y-4">

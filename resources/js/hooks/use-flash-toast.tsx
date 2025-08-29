@@ -7,9 +7,13 @@ export function useFlashToast() {
 
   useEffect(() => {
     if (flash?.toast) {
-      toast[flash.toast.type](flash.toast.message, {
+      const id = toast[flash.toast.type](flash.toast.message, {
         duration: 5000,
         dismissible: true,
+        action: {
+          label: 'Close',
+          onClick: () => toast.dismiss(id)
+        }
       })
     }
   }, [flash])

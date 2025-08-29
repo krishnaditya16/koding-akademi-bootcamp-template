@@ -56,9 +56,20 @@ export interface Product {
     name: string;
     description: string;
     company: string;
-    stock: number;
     price: number;
     image: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface ProductVariant {
+    id: number;
+    product_id: number;
+    product?: Product;
+    variant_name: string;
+    description: string;
+    stock: number;
+    color: string;
     created_at: string;
     updated_at: string;
 }
