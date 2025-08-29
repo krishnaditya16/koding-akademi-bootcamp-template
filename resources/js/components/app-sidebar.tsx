@@ -5,14 +5,32 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { Archive, BookOpen, Folder, LayoutGrid, Tags } from 'lucide-react';
 import AppLogo from './app-logo';
+import categories from '@/routes/categories';
+import variants from '@/routes/variants';
+import products from '@/routes/products';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Category',
+        href: categories.index(),
+        icon: Tags,
+    },
+    {
+        title: 'Product',
+        href: products.index(),
+        icon: Folder,
+    },
+    {
+        title: 'Variant',
+        href: variants.index(),
+        icon: Archive,
     },
 ];
 

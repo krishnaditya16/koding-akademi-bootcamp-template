@@ -40,3 +40,25 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Category {
+    id: number
+    name: string
+    description: string
+    created_at: string
+    updated_at: string
+}
+
+export interface Product {
+    id: number;
+    category_id: number;
+    category?: Category;
+    name: string;
+    description: string;
+    company: string;
+    stock: number;
+    price: number;
+    image: string;
+    created_at: string;
+    updated_at: string;
+}
