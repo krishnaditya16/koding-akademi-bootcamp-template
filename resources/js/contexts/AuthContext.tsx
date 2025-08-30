@@ -30,7 +30,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .then((res) => {
           setUser(res.data.data);
           const currentPath = window.location.pathname;
-          if (["/login", "/register"].includes(currentPath)) {
+          if (["/auth/login", "/auth/register"].includes(currentPath)) {
             router.visit("/");
           }
         })

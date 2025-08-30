@@ -20,3 +20,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::post('webhook/order', [OrderController::class, 'webhookPayment'])->name('order.webhook');
+
+Route::get('test-cors', function () {
+    return response()->json(['message' => 'CORS working']);
+});

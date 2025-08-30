@@ -27,7 +27,10 @@ Route::get('/auth/register', [MainController::class, 'register'])->name('auth.re
 Route::get('/', [MainController::class, 'home'])->name('home');
 Route::get('/product/{product}', [MainController::class, 'productDetail'])->name('product.detail');
 Route::get('/order', [MainController::class, 'orderForm'])->name('order.form');
-Route::get('/order/list', [MainController::class, 'orderList'])->name('order.list');
+
+Route::middleware(['checkAuth'])->group(function () {
+    Route::get('/order/list', [MainController::class, 'orderList'])->name('order.list');
+});
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

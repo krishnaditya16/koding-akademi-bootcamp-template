@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Auth;
 
 class MainController extends Controller
 {
@@ -41,9 +39,9 @@ class MainController extends Controller
         return Inertia::render('main/order/form');
     }
 
-    public function orderList(Request $request)
+    public function orderList()
     {
-        $user = $request->user();
+        $user = auth('sanctum')->user();
         $orders = Order::where('user_id', $user->id)->get();
 
         return Inertia::render('main/order/list', [
