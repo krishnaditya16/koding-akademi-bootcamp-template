@@ -3,63 +3,74 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\ProductVariant;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function createOrder(Request $request)
     {
-        //
-    }
+        DB::beginTransaction();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        try {
+            $request->validate([
+                'address' => ['required', 'string'],
+                'phone' => ['required', 'string'],
+                'postal_code' => ['required', 'string'],
+                'products.*.id' => ['required', 'exists:product_variants,id'],
+                'products.*.quantity' => ['required', 'integer', 'min:1'],
+            ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+            $order = Order::create([
+                'user_id' => $request->user()->id,
+                'address' => $request->address,
+                'phone' => $request->phone,
+                'postal_code' => $request->postal_code,
+            ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Order $order)
-    {
-        //
-    }
+            $total = 0;
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Order $order)
-    {
-        //
-    }
+            foreach ($request->products as $variantData) {
+                $variant = ProductVariant::find($variantData['id']);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Order $order)
-    {
-        //
-    }
+                if ($variant->stock < $variantData['quantity']) {
+                    throw new Exception("Product variant with id {$variant->id} is out of stock");
+                }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Order $order)
-    {
-        //
+                $variant->decrement('stock', $variantData['quantity']);
+
+                $price = $variant->product->price * $variantData['quantity'];
+
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_variant_id' => $variant->id,
+                    'quantity' => $variantData['quantity'],
+                    'price' => $price,
+                ]);
+
+                $total += $price;
+            }
+
+            $order->update([
+                'total' => $total
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'data' => $order,
+                'message' => 'Order created successfully',
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'data' => null,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
     }
 }

@@ -8,25 +8,23 @@ class Order extends Model
 {
     protected $fillable = [
         'user_id',
+        'address',
         'phone',
+        'postal_code',
         'status',
-        'price',
         'url',
+        'total',
         'payment_method',
         'payment_channel',
-        'first_name',
-        'last_name',
-        'email',
-        'address_description',
-        'address',
-        'city',
-        'postal_code',
-        'country',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-}
 
+    public function orderProducts()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+}
