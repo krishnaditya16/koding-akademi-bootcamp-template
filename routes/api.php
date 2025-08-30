@@ -18,4 +18,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
     Route::get('profile', [AuthController::class, 'profile'])->name('auth.profile');
     Route::post('order', [OrderController::class, 'createOrder'])->name('order.create');
+    Route::post('order/{order}/pay', [OrderController::class, 'payOrder'])->name('order.pay');
 });
+
+Route::post('webhook/order', [OrderController::class, 'webhookPayment'])->name('order.webhook');
