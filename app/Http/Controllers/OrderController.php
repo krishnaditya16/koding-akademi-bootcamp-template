@@ -8,6 +8,7 @@ use App\Models\ProductVariant;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class OrderController extends Controller
 {
@@ -60,10 +61,14 @@ class OrderController extends Controller
 
             DB::commit();
 
-            return response()->json([
-                'data' => $order,
-                'message' => 'Order created successfully',
-            ], 200);
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'data' => $order,
+                    'message' => 'Order created successfully',
+                ], 200);
+            }
+
+            return redirect()->route('order.list')->with('success', 'Order created successfully.');
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -136,10 +141,14 @@ class OrderController extends Controller
 
             DB::commit();
 
-            return response()->json([
-                'data' => $result['invoice_url'],
-                'message' => 'Generated invoice successfully',
-            ], 200);
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'data' => $result['invoice_url'],
+                    'message' => 'Generated invoice successfully',
+                ], 200);
+            }
+
+            return Inertia::location($result['invoice_url']);
         } catch (Exception $e) {
             DB::rollBack();
 

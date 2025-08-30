@@ -27,6 +27,7 @@ export interface SharedData {
     quote: { message: string; author: string };
     auth: Auth;
     sidebarOpen: boolean;
+    flash: FlashMessage;
     [key: string]: unknown;
 }
 
@@ -53,6 +54,7 @@ export interface Product {
     id: number;
     category_id: number;
     category?: Category;
+    variants?: ProductVariant[];
     name: string;
     description: string;
     company: string;
@@ -70,6 +72,21 @@ export interface ProductVariant {
     description: string;
     stock: number;
     color: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Order {
+    id: number;
+    user_id: number;
+    address: string;
+    phone: string;
+    postal_code: string;
+    status: "PENDING" | "PAID" | "FAILED";
+    url?: string;
+    total: number;
+    payment_method?: string;
+    payment_channel?: string;
     created_at: string;
     updated_at: string;
 }

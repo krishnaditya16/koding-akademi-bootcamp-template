@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductVariantController;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,14 @@ Route::middleware(['auth', 'verified', 'checkAdmin'])->prefix('admin')->group(fu
     Route::resource('products', ProductController::class);
     Route::resource('variants', ProductVariantController::class);
 });
+
+Route::get('/auth/login', [MainController::class, 'login'])->name('auth.login');
+Route::get('/auth/register', [MainController::class, 'register'])->name('auth.register');
+
+Route::get('/', [MainController::class, 'home'])->name('home');
+Route::get('/product/{product}', [MainController::class, 'productDetail'])->name('product.detail');
+Route::get('/order', [MainController::class, 'orderForm'])->name('order.form');
+Route::get('/order/list', [MainController::class, 'orderList'])->name('order.list');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

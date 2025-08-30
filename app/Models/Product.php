@@ -21,7 +21,7 @@ class Product extends Model
         return Attribute::get(fn($value) => env('APP_URL') . '/storage/' . $value);
     }
 
-    public function productVariants()
+    public function variants()
     {
         return $this->hasMany(ProductVariant::class);
     }
