@@ -42,7 +42,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const res = await axios.post("/api/login", { email, password });
     setToken(res.data.token);
     localStorage.setItem("token", res.data.token);
-    setUser(res.data.user);
+    setUser(res.data.data);
     axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
     router.visit("/");
   };
@@ -51,7 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const res = await axios.post("/api/register", { name, email, password });
     setToken(res.data.token);
     localStorage.setItem("token", res.data.token);
-    setUser(res.data.user);
+    setUser(res.data.data);
     axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
     router.visit("/");
   };

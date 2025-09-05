@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class MainController extends Controller
@@ -47,5 +48,12 @@ class MainController extends Controller
         return Inertia::render('main/order/list', [
             'orders' => $orders,
         ]);
+    }
+
+    public function testHome()
+    {
+        $user = Auth::user();
+        dd($user);
+        return Inertia::render('test/home');
     }
 }

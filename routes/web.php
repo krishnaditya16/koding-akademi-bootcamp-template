@@ -7,18 +7,22 @@ use App\Http\Controllers\ProductVariantController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+// Route::get('/', function () {
+//     return Inertia::render('welcome');
+// })->name('home');
 
-Route::middleware(['auth', 'verified', 'checkAdmin'])->prefix('admin')->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::middleware('checkAdmin')->prefix('admin')->group(function () {
+        Route::get('dashboard', function () {
+            return Inertia::render('dashboard');
+        })->name('dashboard');
 
-    Route::resource('categories', CategoryController::class);
-    Route::resource('products', ProductController::class);
-    Route::resource('variants', ProductVariantController::class);
+        Route::resource('categories', CategoryController::class);
+        Route::resource('products', ProductController::class);
+        Route::resource('variants', ProductVariantController::class);
+    });
+
+    Route::get('/test', [MainController::class, 'testHome'])->name('test.home');
 });
 
 Route::get('/auth/login', [MainController::class, 'login'])->name('auth.login');
