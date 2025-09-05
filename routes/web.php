@@ -11,30 +11,23 @@ use Inertia\Inertia;
 //     return Inertia::render('welcome');
 // })->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::middleware('checkAdmin')->prefix('admin')->group(function () {
-        Route::get('dashboard', function () {
-            return Inertia::render('dashboard');
-        })->name('dashboard');
+Route::middleware(['auth', 'verified', 'checkAdmin'])->prefix('admin')->group(function () {
+    Route::get('dashboard', function () {
+        return Inertia::render('dashboard');
+    })->name('dashboard');
 
-        Route::resource('categories', CategoryController::class);
-        Route::resource('products', ProductController::class);
-        Route::resource('variants', ProductVariantController::class);
-    });
-
-    Route::get('/test', [MainController::class, 'testHome'])->name('test.home');
+    Route::resource('categories', CategoryController::class);
+    Route::resource('products', ProductController::class);
+    Route::resource('variants', ProductVariantController::class);
 });
-
-Route::get('/auth/login', [MainController::class, 'login'])->name('auth.login');
-Route::get('/auth/register', [MainController::class, 'register'])->name('auth.register');
 
 Route::get('/', [MainController::class, 'home'])->name('home');
 Route::get('/product/{product}', [MainController::class, 'productDetail'])->name('product.detail');
 Route::get('/order', [MainController::class, 'orderForm'])->name('order.form');
 
-Route::middleware(['checkAuth'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/order/list', [MainController::class, 'orderList'])->name('order.list');
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';
