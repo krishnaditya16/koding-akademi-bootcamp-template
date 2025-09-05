@@ -42,18 +42,11 @@ class MainController extends Controller
 
     public function orderList()
     {
-        $user = auth('sanctum')->user();
+        $user = Auth::user();
         $orders = Order::where('user_id', $user->id)->get();
 
         return Inertia::render('main/order/list', [
             'orders' => $orders,
         ]);
-    }
-
-    public function testHome()
-    {
-        $user = Auth::user();
-        dd($user);
-        return Inertia::render('test/home');
     }
 }

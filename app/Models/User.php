@@ -50,8 +50,8 @@ class User extends Authenticatable
     public function getRedirectRoute()
     {
         return match ($this->role) {
-            'ADMIN' => 'admin/dashboard',
-            'CUSTOMER' => 'test'
+            'ADMIN' => '/admin/dashboard',
+            'CUSTOMER' => '/'
         };
     }
 }

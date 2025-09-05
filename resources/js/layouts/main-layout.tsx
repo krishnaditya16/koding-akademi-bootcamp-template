@@ -1,7 +1,5 @@
 import React from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import { Link } from "@inertiajs/react";
-import { login, register } from "@/routes/auth";
+import { Link, router, usePage } from "@inertiajs/react";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -12,11 +10,16 @@ import {
 import { Card } from "@/components/ui/card";
 import { Archive, ShoppingBag } from "lucide-react";
 import { form, list } from "@/routes/order";
-import { home } from "@/routes";
+import { home, login, logout, register } from "@/routes";
 import { Toaster } from "sonner";
+import { SharedData } from "@/types";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
-  const { user, logout } = useAuth();
+  const { auth } = usePage<SharedData>().props;
+
+  const handleLogout = () => {
+    router.flushAll();
+  };
 
   return (
     <div className="min-h-screen bg-muted/40">
@@ -35,11 +38,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
           <NavigationMenu>
             <NavigationMenuList>
-              {user ? (
+              {auth.user ? (
                 <>
                   <NavigationMenuItem>
                     <span className="px-3 py-2 text-sm">
-                      Hello {user.name}
+                      Hello {auth.user.name}
                     </span>
                   </NavigationMenuItem>
                   <NavigationMenuItem>
@@ -53,13 +56,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                   <NavigationMenuItem>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={logout}
-                    >
+                    <Link href={logout()} onClick={handleLogout}>
                       Logout
-                    </Button>
+                    </Link>
                   </NavigationMenuItem>
                 </>
               ) : (
