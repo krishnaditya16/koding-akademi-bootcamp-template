@@ -14,17 +14,17 @@ class OrderController extends Controller
 {
     public function createOrder(Request $request)
     {
+        $request->validate([
+            'address' => ['required', 'string'],
+            'phone' => ['required', 'string'],
+            'postal_code' => ['required', 'string'],
+            'products.*.id' => ['required', 'exists:product_variants,id'],
+            'products.*.quantity' => ['required', 'integer', 'min:1'],
+        ]);
+
         DB::beginTransaction();
 
         try {
-            $request->validate([
-                'address' => ['required', 'string'],
-                'phone' => ['required', 'string'],
-                'postal_code' => ['required', 'string'],
-                'products.*.id' => ['required', 'exists:product_variants,id'],
-                'products.*.quantity' => ['required', 'integer', 'min:1'],
-            ]);
-
             $order = Order::create([
                 'user_id' => $request->user()->id,
                 'address' => $request->address,
@@ -61,6 +61,7 @@ class OrderController extends Controller
 
             DB::commit();
 
+            // Return JSON response
             if ($request->wantsJson()) {
                 return response()->json([
                     'data' => $order,
@@ -68,14 +69,19 @@ class OrderController extends Controller
                 ], 200);
             }
 
+            // Return Inertia response
             return redirect()->route('order.list')->with('success', 'Order created successfully.');
         } catch (Exception $e) {
             DB::rollBack();
 
-            return response()->json([
-                'data' => null,
-                'message' => $e->getMessage(),
-            ], 400);
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'data' => null,
+                    'message' => $e->getMessage(),
+                ], 400);
+            }
+
+            return back()->with('error', $e->getMessage());
         }
     }
 
@@ -152,10 +158,14 @@ class OrderController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
-            return response()->json([
-                'data' => null,
-                'message' => $e->getMessage(),
-            ], 500);
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'data' => null,
+                    'message' => $e->getMessage(),
+                ], 500);
+            }
+
+            return back()->with('error', $e->getMessage());
         }
     }
 

@@ -15,8 +15,8 @@ Route::post('register', [AuthController::class, 'register'])->name('api.register
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('api.logout');
     Route::get('profile', [AuthController::class, 'profile'])->name('api.profile');
-    Route::post('order', [OrderController::class, 'createOrder'])->name('order.create');
-    Route::post('order/{order}/pay', [OrderController::class, 'payOrder'])->name('order.pay');
+    Route::post('order', [OrderController::class, 'createOrder'])->name('api.order.create');
+    Route::post('order/{order}/pay', [OrderController::class, 'payOrder'])->name('api.order.pay');
 });
 
 Route::post('webhook/order', [OrderController::class, 'webhookPayment'])->name('order.webhook');
