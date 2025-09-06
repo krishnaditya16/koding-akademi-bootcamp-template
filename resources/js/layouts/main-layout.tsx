@@ -1,22 +1,21 @@
-import React from "react";
-import { Link, router, usePage } from "@inertiajs/react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   NavigationMenu,
-  NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuLink,
+  NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import { Card } from "@/components/ui/card";
-import { Archive, ShoppingBag } from "lucide-react";
-import { form, list } from "@/routes/order";
 import { home, login, logout, register } from "@/routes";
-import { Toaster } from "sonner";
+import { form, list } from "@/routes/order";
 import { SharedData } from "@/types";
+import { Link, router, usePage } from "@inertiajs/react";
+import { Archive, ShoppingBag } from "lucide-react";
+import React from "react";
+import { Toaster } from "sonner";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const { auth } = usePage<SharedData>().props;
-
   const handleLogout = () => {
     router.flushAll();
   };
@@ -26,15 +25,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       {/* Header */}
       <Card className="rounded-none border-b shadow-sm mb-4">
         <div className="flex justify-between items-center px-6">
-          <div className="flex flex-row gap-4">
-            <Link href={home()} className="font-bold text-xl">Online Shop</Link>
-            <Link href={form()}>
-              <Button size="sm" className="flex items-center">
-                <ShoppingBag size={20} className="mr-2" />
-                Cart
-              </Button>
-            </Link>
-          </div>
+          <Link href={home()} className="font-bold text-xl">Online Shop</Link>
 
           <NavigationMenu>
             <NavigationMenuList>
@@ -51,6 +42,16 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                         <Button size="sm" className="flex items-center">
                           <Archive size={20} className="mr-2" />
                           Order List
+                        </Button>
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link href={form()}>
+                        <Button size="sm" className="flex items-center">
+                          <ShoppingBag size={20} className="mr-2" />
+                          Checkout
                         </Button>
                       </Link>
                     </NavigationMenuLink>

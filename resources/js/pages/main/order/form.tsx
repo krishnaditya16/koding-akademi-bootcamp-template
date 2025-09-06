@@ -1,27 +1,15 @@
-import { useState } from "react";
-import MainLayout from "@/layouts/main-layout";
+import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardContent,
   CardHeader,
   CardTitle,
-  CardContent,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { useAuth } from "@/contexts/AuthContext";
-import { router, useForm } from "@inertiajs/react";
-import { create, list } from "@/routes/order";
 import { Label } from "@/components/ui/label";
+import MainLayout from "@/layouts/main-layout";
+import { create } from "@/routes/order";
+import { useForm } from "@inertiajs/react";
 import { toast } from "sonner";
 
 // dummy cart data
@@ -37,11 +25,8 @@ interface CheckoutFormData {
   products: { id: number; quantity: number }[];
 }
 
-export default function CartPage() {
-  const { user } = useAuth();
-  const [showAlert, setShowAlert] = useState(false);
-
-  const { data, setData, post, processing, errors, reset, setError, clearErrors } =
+export default function OrderFormPage() {
+  const { data, setData, post, processing, errors, reset } =
     useForm<CheckoutFormData>({
       address: "",
       phone: "",
@@ -50,27 +35,10 @@ export default function CartPage() {
     });
 
   const handleCheckout = () => {
-    if (!user) return setShowAlert(true);
-
-    clearErrors();
-
-    const required: (keyof CheckoutFormData)[] = ["address", "phone", "postal_code"];
-    let hasError = false;
-
-    required.forEach((field) => {
-      if (!data[field]) {
-        setError(field, `${field.replace("_", " ")} is required`);
-        hasError = true;
-      }
-    });
-
-    if (hasError) return;
-
     post(create().url, {
       onSuccess: () => {
         reset();
         toast.success("Order placed successfully.");
-        router.push(list());
       },
       onError: (errs) => console.log("Checkout errors:", errs),
     });
@@ -149,25 +117,6 @@ export default function CartPage() {
             </Button>
           </CardContent>
         </Card>
-
-        <AlertDialog open={showAlert} onOpenChange={setShowAlert}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Login Required</AlertDialogTitle>
-              <AlertDialogDescription>
-                You must be logged in to proceed with checkout.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={() => setShowAlert(false)}>
-                Cancel
-              </AlertDialogCancel>
-              <AlertDialogAction onClick={() => setShowAlert(false)}>
-                Okay
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </div>
     </MainLayout>
   );

@@ -1,9 +1,9 @@
-import MainLayout from "@/layouts/main-layout";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import MainLayout from "@/layouts/main-layout";
+import { pay } from "@/routes/order";
 import { Order } from "@/types";
 import { router } from "@inertiajs/react";
-import { pay } from "@/routes/order";
 
 interface OrderListProps {
   orders: Order[];
